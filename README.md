@@ -20,7 +20,7 @@ C#
 5)In the consumer script define all the functions you wish to be used as action methods like so:
  [observer.AddEventAction(Observer.EventTypes.OnDisabled, OnTargetDisabled);]
  
- See Consumer script for clearer example.
+ See [Consumer]() script for clearer example.
  
  <!-- LICENSE -->
 ## License
@@ -32,4 +32,4 @@ Distributed under the MIT License. See [LICENSE](https://github.com/Genso-0/Obse
 
 [@genso_0](https://twitter.com/genso_0)
 
-Project Link: [Mesh-Gizmos](https://github.com/Genso-0/Mesh-Gizmos)
+Project Link: [ObserverAndObservable](https://github.com/Genso-0/ObserverAndObservableForUnity)
