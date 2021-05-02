@@ -25,7 +25,7 @@ C#
  <!-- LICENSE -->
 ## License
 
-Distributed under the MIT License. See [LICENSE](https://github.com/Genso-0/Mesh-Gizmos/blob/master/LICENSE) for more information.
+Distributed under the MIT License. See [LICENSE](https://github.com/Genso-0/ObserverAndObservableForUnity/blob/master/LICENSE) for more information.
 
 <!-- CONTACT -->
 ## Contact
