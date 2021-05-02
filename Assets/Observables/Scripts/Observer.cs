@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿ 
+using System.Collections.Generic; 
 
 namespace Observables
 {
@@ -12,21 +10,21 @@ namespace Observables
     {
         public Observer()
         {
-            observables = new List<ObservableTransform>();
+            observables = new Dictionary<int,ObservableTransform>();
             subscriptions = new Dictionary<EventTypes, List<ObservableTransform.ObservableChange>>();
         }
-        public List<ObservableTransform> observables { get; private set; }
-      
+        public IDictionary<int,ObservableTransform> observables { get; private set; }
+
         IDictionary<EventTypes, List<ObservableTransform.ObservableChange>> subscriptions;
         public bool AddEventAction(EventTypes e, ObservableTransform.ObservableChange action)
         {
             if (!subscriptions.ContainsKey(e))
                 subscriptions.Add(e, new List<ObservableTransform.ObservableChange>());
 
-            if (!subscriptions[e].Contains(action as ObservableTransform.ObservableChange))
+            if (!subscriptions[e].Contains(action))
             {
                 subscriptions[e].Add(action);
-                foreach (var o in observables)
+                foreach (var o in observables.Values)
                 {
                     switch (e)
                     {
@@ -40,7 +38,7 @@ namespace Observables
                             o.OnDestroyed += action;
                             break;
                         case EventTypes.OnTransformChange:
-                            o.OnTransformChange_Args += action;
+                            o.OnTransformChanged += action;
                             break;
                     }
                 }
@@ -60,7 +58,7 @@ namespace Observables
             {
                 if (subscriptions[e].Contains(action))
                 {
-                    foreach (var o in observables)
+                    foreach (var o in observables.Values)
                     {
                         switch (e)
                         {
@@ -74,7 +72,7 @@ namespace Observables
                                 o.OnDestroyed -= action;
                                 break;
                             case EventTypes.OnTransformChange:
-                                o.OnTransformChange_Args -= action;
+                                o.OnTransformChanged -= action;
                                 break;
                         }
                     }
@@ -89,7 +87,7 @@ namespace Observables
         /// <param name="o"></param>
         public bool AddObservable(ObservableTransform o)
         {
-            if (!observables.Contains(o))
+            if (o != null && !observables.ContainsKey(o.Hash))
             {
                 if (subscriptions.ContainsKey(EventTypes.OnDisabled))
                     foreach (var onEnableActions in subscriptions[EventTypes.OnDisabled])
@@ -105,9 +103,10 @@ namespace Observables
 
                 if (subscriptions.ContainsKey(EventTypes.OnTransformChange))
                     foreach (var onEnableActions in subscriptions[EventTypes.OnTransformChange])
-                        o.OnTransformChange_Args += onEnableActions;
+                        o.OnTransformChanged += onEnableActions;
 
-                observables.Add(o);
+                o.OnDestroyed += ObservableDestroyed;
+                observables.Add(o.Hash,o);
                 return true;
             }
             return false;
@@ -118,7 +117,7 @@ namespace Observables
         /// <param name="o"></param>
         public bool RemoveObservable(ObservableTransform o)
         {
-            if (observables.Contains(o))
+            if (observables.ContainsKey(o.Hash))
             {
                 if (subscriptions.ContainsKey(EventTypes.OnDisabled))
                     foreach (var onEnableActions in subscriptions[EventTypes.OnDisabled])
@@ -134,13 +133,17 @@ namespace Observables
 
                 if (subscriptions.ContainsKey(EventTypes.OnTransformChange))
                     foreach (var onEnableActions in subscriptions[EventTypes.OnTransformChange])
-                        o.OnTransformChange_Args -= onEnableActions;
+                        o.OnTransformChanged -= onEnableActions;
 
-                return observables.Remove(o);
+                o.OnDestroyed -= ObservableDestroyed;
+                return observables.Remove(o.Hash);
             }
             return false;
         }
-      
+        void ObservableDestroyed(int hash)
+        {
+            RemoveObservable(observables[hash]);
+        }
         public enum EventTypes
         {
             OnEnabled,

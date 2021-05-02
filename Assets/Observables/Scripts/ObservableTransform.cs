@@ -8,12 +8,10 @@ namespace Observables
     public class ObservableTransform : MonoBehaviour
     {
         public delegate void ObservableChange(int hash);
-        public event ObservableChange OnTransformChange_Args;
+        public event ObservableChange OnTransformChanged;
         public event ObservableChange OnDisabled;
         public event ObservableChange OnEnabled;
-        public event ObservableChange OnDestroyed;
-        public delegate void TransformChange();
-        public event TransformChange OnTransformChange;
+        public event ObservableChange OnDestroyed; 
         int m_hash;
         public int Hash { get { return GetHash(); } }
  
@@ -27,9 +25,8 @@ namespace Observables
         {
             if (transform.hasChanged)
             {
-                transform.hasChanged = false;
-                OnTransformChange?.Invoke();
-                OnTransformChange_Args?.Invoke(Hash); 
+                transform.hasChanged = false; 
+                OnTransformChanged?.Invoke(Hash); 
             }
         }
         void OnEnable()

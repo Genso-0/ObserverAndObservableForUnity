@@ -9,15 +9,14 @@ namespace Observables
         Observer observer;
         public bool gizmosOn;
         [SerializeField] List<ObservableTransform> toBeAdded;
-        [SerializeField] List<ObservableTransform> toBeRemoved;
+        [SerializeField] List<ObservableTransform> toBeRemoved;  
         void Start()
         { 
             observer = new Observer(); 
             //Adding actions we wish to be called when an observable raises an event.
             observer.AddEventAction(Observer.EventTypes.OnDisabled, OnTargetDisabled);
             observer.AddEventAction(Observer.EventTypes.OnDestroyed, OnTargetDestroyed);
-            observer.AddEventAction(Observer.EventTypes.OnEnabled, OnTargetEnabled);
-
+            observer.AddEventAction(Observer.EventTypes.OnEnabled, OnTargetEnabled); 
             AddObservables();//Note even though we are adding the observables after adding the events, the observer will handle
             //organising the actions to the newly added observables
         }
@@ -54,7 +53,7 @@ namespace Observables
             if (gizmosOn && observer != null)
             {
                 if (observer.observables != null)
-                    foreach (var o in observer.observables)
+                    foreach (var o in observer.observables.Values)
                     {
                         Gizmos.DrawLine(transform.position, o.transform.position);
                     }
