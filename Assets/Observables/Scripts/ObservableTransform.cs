@@ -1,4 +1,5 @@
 ﻿
+using System.Collections.Generic;
 using UnityEngine;
 namespace Observables
 {
@@ -7,39 +8,62 @@ namespace Observables
     /// </summary>
     public class ObservableTransform : MonoBehaviour
     {
+        private IDictionary<ObservableEventTypes, ObservableChange> table = new Dictionary<ObservableEventTypes, ObservableChange>();
         public delegate void ObservableChange(int hash);
-        public event ObservableChange OnTransformChanged;
-        public event ObservableChange OnDisabled;
-        public event ObservableChange OnEnabled;
-        public event ObservableChange OnDestroyed; 
-        int m_hash;
-        public int Hash { get { return GetHash(); } }
- 
-        int GetHash()
+        private event ObservableChange OnTransformChanged;
+        private event ObservableChange OnDisabled;
+        private event ObservableChange OnEnabled;
+        private event ObservableChange OnDestroyed;
+        private int m_hash; 
+        private bool initialised;
+        void Init()
         {
-            if (m_hash == 0)
-                m_hash = GetHashCode();
+            table.Add(ObservableEventTypes.OnTransformChange, OnTransformChanged);
+            table.Add(ObservableEventTypes.OnDisabled, OnDisabled);
+            table.Add(ObservableEventTypes.OnEnabled, OnEnabled);
+            table.Add(ObservableEventTypes.OnDestroyed, OnDestroyed);
+            m_hash = GetHashCode();
+            initialised = true;
+        }
+        public void AddAction(ObservableEventTypes e, ObservableChange action)
+        {
+            if (!initialised) 
+                Init(); 
+            table[e] += action;
+        }
+        public void RemoveAction(ObservableEventTypes e, ObservableChange action)
+        {
+            if (!initialised) 
+                Init(); 
+            table[e] -= action;
+        }
+        public int GetHash()
+        {
+            if (!initialised) 
+                Init(); 
             return m_hash;
         }
         void LateUpdate()
         {
             if (transform.hasChanged)
             {
-                transform.hasChanged = false; 
-                OnTransformChanged?.Invoke(Hash); 
+                transform.hasChanged = false;
+                table[ObservableEventTypes.OnTransformChange]?.Invoke(m_hash);
             }
         }
         void OnEnable()
         {
-            OnEnabled?.Invoke(Hash);
+            if (!initialised) 
+                Init(); 
+            table[ObservableEventTypes.OnEnabled]?.Invoke(m_hash);
         }
         void OnDisable()
-        {
-            OnDisabled?.Invoke(Hash);
+        { 
+            table[ObservableEventTypes.OnDisabled]?.Invoke(m_hash);
         }
         void OnDestroy()
-        {
-            OnDestroyed?.Invoke(Hash);
+        { 
+            table[ObservableEventTypes.OnDestroyed]?.Invoke(m_hash);
         }
     }
 }

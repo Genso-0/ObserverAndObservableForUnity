@@ -14,9 +14,9 @@ namespace Observables
         { 
             observer = new Observer(); 
             //Adding actions we wish to be called when an observable raises an event.
-            observer.AddEventAction(Observer.EventTypes.OnDisabled, OnTargetDisabled);
-            observer.AddEventAction(Observer.EventTypes.OnDestroyed, OnTargetDestroyed);
-            observer.AddEventAction(Observer.EventTypes.OnEnabled, OnTargetEnabled); 
+            observer.AddEventAction(ObservableEventTypes.OnDisabled, OnTargetDisabled);
+            observer.AddEventAction(ObservableEventTypes.OnDestroyed, OnTargetDestroyed);
+            observer.AddEventAction(ObservableEventTypes.OnEnabled, OnTargetEnabled); 
             AddObservables();//Note even though we are adding the observables after adding the events, the observer will handle
             //organising the actions to the newly added observables
         }
