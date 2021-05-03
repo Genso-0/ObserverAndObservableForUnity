@@ -12,7 +12,7 @@ C#
 <!-- GETTING STARTED -->
 ## Getting Started
 1) Open up example scene to see how things are set up.
-2) A consumer script (or any name you chose) is placed on the game object you wish to be listening in on other game object events.
+2) A consumer script (or any name you chose) is placed on the game object you wish to be listening in on state changes of other objects.
 3) A ObservableTransform script is added to gameobject who can be listened in on.
 4) Add the object with the observable script to the consumer script 
 (in the example scene this can be done by adding the observable to the consumer list and then right clicking on the consumer script and selecting Add observables)
