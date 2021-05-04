@@ -18,7 +18,9 @@ C#
 (In the example scene this can be done by adding the observable to the consumer's list toBeAdded and then right clicking on the consumer script and selecting Add observables)
 
 5) The API looks something like this.  
-   Observer observer = new Observer(); 
+     
+   Observer observer = new Observer();   
+     
    //To Add an action.  
    observer.AddEventAction(ObservableEventTypes.OnDisabled, OnTargetDisabled);
    
