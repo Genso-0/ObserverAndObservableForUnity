@@ -22,7 +22,7 @@ C#
    //To Add an action.
    observer.AddEventAction(ObservableEventTypes.OnDisabled, OnTargetDisabled);
    
-   //To Remove an action
+   //To Remove an action\n
   observer.RemoveEventAction(ObservableEventTypes.OnDisabled, OnTargetDisabled);
  
  //To add an observable
