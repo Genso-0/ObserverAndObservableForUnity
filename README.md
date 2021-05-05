@@ -13,12 +13,25 @@ C#
 ## Getting Started
 1) Open up example scene to see how things are set up.
 2) A consumer script (or any name you chose) is placed on the game object you wish to be listening in on state changes of other objects.
-3) A ObservableTransform script is added to gameobject who can be listened in on.
-4) Add the object with the observable script to the consumer script 
-(in the example scene this can be done by adding the observable to the consumer list and then right clicking on the consumer script and selecting Add observables)
+3) A ObservableTransform script is added to a gameobject who can be listened in on.
+4) Add the observable gameobject to the consumer gameobject. 
+(In the example scene this can be done by adding the observable to the consumer's list toBeAdded and then right clicking on the consumer script and selecting Add observables)
 
-5)In the consumer script define all the functions you wish to be used as action methods like so:
- [observer.AddEventAction(Observer.EventTypes.OnDisabled, OnTargetDisabled);]
+5) The API looks something like this.  
+     
+   Observer observer = new Observer();   
+     
+   //To Add an action.  
+   observer.AddEventAction(ObservableEventTypes.OnDisabled, OnTargetDisabled);
+   
+   //To Remove an action  
+  observer.RemoveEventAction(ObservableEventTypes.OnDisabled, OnTargetDisabled);
+ 
+ //To add an observable  
+ observer.AddObservable(observableReference);
+ 
+  //To remove an observable  
+ observer.RemoveObservable(observableReference);
  
  See [Consumer](https://github.com/Genso-0/ObserverAndObservableForUnity/blob/master/Assets/Observables/Scripts/Consumer.cs) script for clearer example.
  
