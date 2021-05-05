@@ -16,6 +16,10 @@ namespace Observables
         private event ObservableChange OnDestroyed;
         private int m_hash; 
         private bool initialised;
+        void Awake()
+        {
+            transform.hasChanged = false;
+        }
         void Init()
         {
             table.Add(ObservableEventTypes.OnTransformChange, OnTransformChanged);
