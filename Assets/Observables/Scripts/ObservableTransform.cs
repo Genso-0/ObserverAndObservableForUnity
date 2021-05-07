@@ -16,6 +16,8 @@ namespace Observables
         private event ObservableChange OnDestroyed;
         private int m_hash; 
         private bool initialised;
+        public float onMoveTriggerCoolDown = 0.1f;
+        float tick_onMoveTriggerCoolDown;
         void Awake()
         {
             transform.hasChanged = false;
@@ -49,11 +51,14 @@ namespace Observables
         }
         void LateUpdate()
         {
-            if (transform.hasChanged)
-            {
-                transform.hasChanged = false;
-                table[ObservableEventTypes.OnTransformChange]?.Invoke(m_hash);
-            }
+            if (tick_onMoveTriggerCoolDown > onMoveTriggerCoolDown)
+                if (transform.hasChanged)
+                {
+                    tick_onMoveTriggerCoolDown = 0;
+                    transform.hasChanged = false;
+                    table[ObservableEventTypes.OnTransformChange]?.Invoke(m_hash);
+                }
+            tick_onMoveTriggerCoolDown += Time.deltaTime;
         }
         void OnEnable()
         {
